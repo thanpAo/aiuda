@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.aiuda.fragments.ListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import fragments.HomeFragment
 import fragments.ProfileFragment
@@ -29,15 +30,13 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    loadFragment(HomeFragment())
+                    loadFragment(ListFragment())
                     true
                 }
-
                 R.id.nav_profile -> {
                     openCamera()
                     true
                 }
-
                 else -> false
             }
         }
@@ -64,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 val imageBitmap = intent?.extras?.get("data") as Bitmap
-                val imageView = findViewById<ImageView>(R.id.imageView)
+                val imageView = findViewById<ImageView>(R.id.search_icon)
                 imageView.setImageBitmap(imageBitmap)
             }
         }

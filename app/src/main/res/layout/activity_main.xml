@@ -1,14 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Contenedor principal de la interfaz -->
+    <!-- Barra de búsqueda en la parte superior -->
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@drawable/search_bar_background"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="49dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="Icono de búsqueda"
+            android:src="@drawable/ic_search_icon" />
+
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Add to your search"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:paddingStart="8dp"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <!-- Contenedor principal de la lista debajo de la barra de búsqueda -->
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"
         android:layout_above="@id/bottom_navigation" />
 
     <!-- Barra de navegación inferior -->
@@ -20,11 +50,13 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled" />
 
+    <!-- Vista previa de la cámara -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="81dp"
+        android:layout_height="76dp"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/search_bar"
         android:layout_marginTop="16dp"
         android:contentDescription="Camera preview" />
 </RelativeLayout>
