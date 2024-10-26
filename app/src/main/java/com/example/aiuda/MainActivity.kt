@@ -1,8 +1,10 @@
 package com.example.aiuda
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    openCamera()
+                    showImageSourceDialog() // Mostrar diálogo para elegir entre cámara o galería
                     true
                 }
                 else -> false
@@ -51,20 +53,51 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    // Mostrar diálogo para que el usuario elija entre tomar foto o seleccionar de galería
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Tomar Foto", "Seleccionar de Galería")
+        AlertDialog.Builder(this)
+            .setTitle("Elige una opción")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera() // Opción para abrir la cámara
+                    1 -> openGallery() // Opción para abrir la galería
+                }
+            }
+            .show()
+    }
+
     // Función para abrir la cámara
     private fun openCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startForResult.launch(cameraIntent)
+        startForResultCamera.launch(cameraIntent)
+    }
+
+    // Función para abrir la galería
+    private fun openGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startForResultGallery.launch(galleryIntent)
     }
 
     // Evento que procesa el resultado de la cámara y envía la vista previa de la foto al ImageView
-    private val startForResult =
+    private val startForResultCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 val imageBitmap = intent?.extras?.get("data") as Bitmap
                 val imageView = findViewById<ImageView>(R.id.search_icon)
                 imageView.setImageBitmap(imageBitmap)
+            }
+        }
+
+    // Evento que procesa el resultado de la galería y envía la imagen seleccionada al ImageView
+    private val startForResultGallery =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val imageUri = intent?.data
+                val imageView = findViewById<ImageView>(R.id.search_icon)
+                imageView.setImageURI(imageUri)
             }
         }
 }
